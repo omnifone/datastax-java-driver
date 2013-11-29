@@ -51,11 +51,11 @@ Metrics
 
 Depends on Codahale Metrics version 3.0.1:
 
-	<dependency>
-		<groupId>com.codahale.metrics</groupId>
-		<artifactId>metrics-core</artifactId>
-		<version>3.0.1</version>
-	</dependency>
+    <dependency>
+      <groupId>com.codahale.metrics</groupId>
+      <artifactId>metrics-core</artifactId>
+      <version>3.0.1</version>
+    </dependency>
 	
 Troubleshooting
 ~~~~~~~~~~~~~~~
