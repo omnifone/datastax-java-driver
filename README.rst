@@ -49,7 +49,7 @@ it in your application using the following Maven dependency::
 Metrics
 -------
 
-Depends on Codahale Metrics version 3.0.1:
+Depends on Codahale Metrics version 3.0.1::
 
     <dependency>
       <groupId>com.codahale.metrics</groupId>
