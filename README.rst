@@ -47,7 +47,7 @@ it in your application using the following Maven dependency::
     </dependency>
 
 Metrics
--------
+~~~~~~~
 
 Depends on Codahale Metrics version 3.0.1:
 
