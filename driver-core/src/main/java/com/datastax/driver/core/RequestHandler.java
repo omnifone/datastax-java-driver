@@ -39,7 +39,7 @@ import org.apache.cassandra.exceptions.PreparedQueryNotFoundException;
 import org.apache.cassandra.exceptions.ReadTimeoutException;
 import org.apache.cassandra.exceptions.WriteTimeoutException;
 
-import com.yammer.metrics.core.TimerContext;
+import com.codahale.metrics.Timer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +69,7 @@ class RequestHandler implements Connection.ResponseCallback {
     private volatile boolean isCanceled;
     private volatile Connection.ResponseHandler connectionHandler;
 
-    private final TimerContext timerContext;
+    private final Timer.Context timerContext;
     private final long startTime;
 
     public RequestHandler(Session.Manager manager, Callback callback, Query query) {
