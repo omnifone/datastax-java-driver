@@ -46,6 +46,17 @@ it in your application using the following Maven dependency::
       <version>1.0.4-dse</version>
     </dependency>
 
+Metrics
+-------
+
+Depends on Codahale Metrics version 3.0.1:
+
+	<dependency>
+		<groupId>com.codahale.metrics</groupId>
+		<artifactId>metrics-core</artifactId>
+		<version>3.0.1</version>
+	</dependency>
+	
 Troubleshooting
 ~~~~~~~~~~~~~~~
 
