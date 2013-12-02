@@ -151,9 +151,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:datastax/java-driver.git</connection>
-    <developerConnection>scm:git:git@github.com:datastax/java-driver.git</developerConnection>
-    <url>https://github.com/datastax/java-driver</url>
+    <connection>scm:git:git@github.com:omnifone/datastax-java-driver</connection>
+    <developerConnection>scm:git:git@github.com:omnifone/datastax-java-driver.git</developerConnection>
+    <url>https://github.com/omnifone/datastax-java-driver</url>
   </scm>
 
   <developers>
