@@ -16,7 +16,7 @@
   <parent>
     <groupId>com.datastax.cassandra</groupId>
     <artifactId>cassandra-driver-examples-parent</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5.Omnifone-SNAPSHOT</version>
   </parent>
   <artifactId>cassandra-driver-examples-stress</artifactId>
   <packaging>jar</packaging>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>com.datastax.cassandra</groupId>
       <artifactId>cassandra-driver-core</artifactId>
-      <version>1.0.5-SNAPSHOT</version>
+      <version>1.0.5.Omnifone-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -84,9 +84,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:omnifone/datastax-java-driver</connection>
-    <developerConnection>scm:git:git@github.com:omnifone/datastax-java-driver.git</developerConnection>
-    <url>https://github.com/omnifone/datastax-java-driver</url>
+    <connection>scm:git:git@github.com:omnifone/datastax-java-driver/tree/1.0</connection>
+    <developerConnection>scm:git:git@github.com:omnifone/datastax-java-driver.git/tree/1.0</developerConnection>
+    <url>https://github.com/omnifone/datastax-java-driver/tree/1.0</url>
   </scm>
 
   <developers>

@@ -21,7 +21,7 @@
   
   <groupId>com.datastax.cassandra</groupId>
   <artifactId>cassandra-driver-parent</artifactId>
-  <version>1.0.5-SNAPSHOT</version>
+  <version>1.0.5.Omnifone-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DataStax Java Driver for Apache Cassandra</name>
   <description>A driver for Apache Cassandra 1.2+ that works exclusively with the Cassandra Query Language version 3 (CQL3) and Cassandra's binary protocol.</description>
@@ -151,9 +151,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:omnifone/datastax-java-driver</connection>
-    <developerConnection>scm:git:git@github.com:omnifone/datastax-java-driver.git</developerConnection>
-    <url>https://github.com/omnifone/datastax-java-driver</url>
+    <connection>scm:git:git@github.com:omnifone/datastax-java-driver/tree/1.0</connection>
+    <developerConnection>scm:git:git@github.com:omnifone/datastax-java-driver.git/tree/1.0</developerConnection>
+    <url>https://github.com/omnifone/datastax-java-driver/tree/1.0</url>
   </scm>
 
   <developers>
