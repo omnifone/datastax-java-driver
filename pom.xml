@@ -138,6 +138,15 @@
         </supportedProjectTypes>
       </configuration>
     </plugin>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-scm-plugin</artifactId>
+      <version>1.8.1</version>
+      <configuration>
+          <scmVersion>1.0</scmVersion>
+          <scmVersionType>branch</scmVersionType>
+      </configuration>
+    </plugin>
     </plugins>
   </build>
 
@@ -151,9 +160,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:omnifone/datastax-java-driver/tree/1.0</connection>
-    <developerConnection>scm:git:git@github.com:omnifone/datastax-java-driver.git/tree/1.0</developerConnection>
-    <url>https://github.com/omnifone/datastax-java-driver/tree/1.0</url>
+    <connection>scm:git:git@github.com:omnifone/datastax-java-driver</connection>
+    <developerConnection>scm:git:git@github.com:omnifone/datastax-java-driver.git</developerConnection>
+    <url>https://github.com/omnifone/datastax-java-driver</url>
   </scm>
 
   <developers>
