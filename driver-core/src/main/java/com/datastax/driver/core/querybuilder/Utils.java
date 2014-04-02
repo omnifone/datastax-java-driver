@@ -50,7 +50,7 @@ abstract class Utils {
         return sb;
     }
 
-    static StringBuilder joinAndAppendNames(StringBuilder sb, String separator, List<Object> values) {
+    static StringBuilder joinAndAppendNames(StringBuilder sb, String separator, List values) {
         for (int i = 0; i < values.size(); i++) {
             if (i > 0)
                 sb.append(separator);
@@ -59,7 +59,7 @@ abstract class Utils {
         return sb;
     }
 
-    static StringBuilder joinAndAppendValues(StringBuilder sb, String separator, List<Object> values, List<ByteBuffer> variables) {
+    static StringBuilder joinAndAppendValues(StringBuilder sb, String separator, List values, List<ByteBuffer> variables) {
         for (int i = 0; i < values.size(); i++) {
             if (i > 0)
                 sb.append(separator);

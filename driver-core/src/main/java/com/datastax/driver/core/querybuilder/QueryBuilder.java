@@ -274,6 +274,28 @@ public final class QueryBuilder {
     public static Clause eq(String name, Object value) {
         return new Clause.SimpleClause(name, "=", value);
     }
+    
+    /**
+     * Creates a slice from the provided values
+     *
+     * @param names the column names
+     * @param values the values
+     * @return the corresponding where clause.
+     */
+    public static Clause sliceGt(List names, List<Object> values) {
+        return new Clause.SlicingClause(names, ">", values);
+    }
+    
+    /**
+     * Creates a slice from the provided values
+     *
+     * @param names the column names
+     * @param values the values
+     * @return the corresponding where clause.
+     */
+    public static Clause sliceLt(List names, List<Object> values) {
+        return new Clause.SlicingClause(names, "<", values);
+    }
 
     /**
      * Create an "in" where clause stating the provided column must be equal

@@ -104,4 +104,44 @@ public abstract class Clause extends Utils.Appendeable {
             return false;
         }
     }
+    
+    static class SlicingClause extends Clause {
+
+        private final List<String> names;
+        private final String op;
+        private final List<Object> values;
+
+        SlicingClause(List<String> names, String op, List<Object> values) {
+            super(names.get(0).toString());
+            this.op = op;
+            this.values = values;
+            this.names = names;
+            
+            if (names == null)
+                throw new IllegalArgumentException("Missing column names for slicing clause");
+            
+            if (values == null)
+                throw new IllegalArgumentException("Missing values for slicing clause");
+        }
+
+        @Override
+        void appendTo(StringBuilder sb, List<ByteBuffer> variables) {
+            sb.append("(");
+            Utils.joinAndAppendNames(sb, ",", names).append(") ").append(op).append(" (");
+            Utils.joinAndAppendValues(sb, ",", values, variables).append(')');
+        }
+
+        @Override
+        Object firstValue() {
+            return values.get(0);
+        }
+
+        @Override
+        boolean containsBindMarker() {
+            for (Object value : values)
+                if (Utils.containsBindMarker(value))
+                    return true;
+            return false;
+        }
+    }
 }
