@@ -16,10 +16,13 @@
 package com.datastax.driver.core;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.common.collect.ImmutableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Cassandra node.
@@ -28,10 +31,9 @@ import com.google.common.collect.ImmutableList;
  */
 public class Host {
 
-    private final InetAddress address;
+    private static final Logger logger = LoggerFactory.getLogger(Host.class);
 
-    private volatile String datacenter;
-    private volatile String rack;
+    private final InetSocketAddress address;
 
     private volatile boolean isUp;
     private final ConvictionPolicy policy;
@@ -41,9 +43,19 @@ public class Host {
 
     final ExecutionInfo defaultExecutionInfo;
 
+    private volatile String datacenter;
+    private volatile String rack;
+    private volatile VersionNumber cassandraVersion;
+
+    // The listen_address (really, the broadcast one) as know by Cassandra. We use that internally because
+    // that's the 'peer' in the 'System.peers' table and avoids querying the full peers table in
+    // ControlConnection.refreshNodeInfo. We don't want to expose however because we don't always have the info
+    // (partly because the 'System.local' doesn't have it for some weird reason for instance).
+    volatile InetAddress listenAddress;
+
     // ClusterMetadata keeps one Host object per inet address, so don't use
     // that constructor unless you know what you do (use ClusterMetadata.getHost typically).
-    Host(InetAddress address, ConvictionPolicy.Factory policy) {
+    Host(InetSocketAddress address, ConvictionPolicy.Factory policy) {
         if (address == null || policy == null)
             throw new NullPointerException();
 
@@ -57,18 +69,42 @@ public class Host {
         this.rack = rack;
     }
 
+    void setVersionAndListenAdress(String cassandraVersion, InetAddress listenAddress) {
+        if (listenAddress != null)
+            this.listenAddress = listenAddress;
+
+        if (cassandraVersion == null)
+            return;
+        try {
+            this.cassandraVersion = VersionNumber.parse(cassandraVersion);
+        } catch (IllegalArgumentException e) {
+            logger.warn("Error parsing Cassandra version {}. This shouldn't have happened", cassandraVersion);
+        }
+    }
+
     /**
      * Returns the node address.
+     * <p>
+     * This is a shortcut for {@code getSocketAddress().getAddress()}.
      *
      * @return the node {@link InetAddress}.
      */
     public InetAddress getAddress() {
+        return address.getAddress();
+    }
+
+    /**
+     * Returns the node socket address.
+     *
+     * @return the node {@link InetSocketAddress}.
+     */
+    public InetSocketAddress getSocketAddress() {
         return address;
     }
 
     /**
      * Returns the name of the datacenter this host is part of.
-     *
+     * <p>
      * The returned datacenter name is the one as known by Cassandra. 
      * It is also possible for this information to be unavailable. In that
      * case this method returns {@code null}, and the caller should always be aware
@@ -82,7 +118,7 @@ public class Host {
 
     /**
      * Returns the name of the rack this host is part of.
-     *
+     * <p>
      * The returned rack name is the one as known by Cassandra.
      * It is also possible for this information to be unavailable. In that case
      * this method returns {@code null}, and the caller should always aware of this
@@ -95,11 +131,23 @@ public class Host {
     }
 
     /**
+     * The Cassandra version the host is running.
+     * <p>
+     * As for other host information fetch from Cassandra above, the returned
+     * version can theoretically be null if the information is unavailable.
+     *
+     * @return the Cassandra version the host is running.
+     */
+    public VersionNumber getCassandraVersion() {
+        return cassandraVersion;
+    }
+
+    /**
      * Returns whether the host is considered up by the driver.
      * <p>
-     * Please note that this is only the view of the driver may not reflect the
+     * Please note that this is only the view of the driver and may not reflect
      * reality. In particular a node can be down but the driver hasn't detected
-     * it yet, or he can have been restarted but the driver hasn't detected it
+     * it yet, or it can have been restarted and the driver hasn't detected it
      * yet (in particular, for hosts to which the driver does not connect (because
      * the {@code LoadBalancingPolicy.distance} method says so), this information
      * may be durably inaccurate). This information should thus only be

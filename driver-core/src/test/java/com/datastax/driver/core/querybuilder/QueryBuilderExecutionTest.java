@@ -15,27 +15,19 @@
  */
 package com.datastax.driver.core.querybuilder;
 
-import static com.datastax.driver.core.querybuilder.QueryBuilder.bindMarker;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.in;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.insertInto;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.select;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.update;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import com.datastax.driver.core.CCMBridge;
 import com.datastax.driver.core.RegularStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.TestUtils;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
 
 public class QueryBuilderExecutionTest extends CCMBridge.PerClassSingleNodeCluster {
 
@@ -43,7 +35,8 @@ public class QueryBuilderExecutionTest extends CCMBridge.PerClassSingleNodeClust
 
     @Override
     protected Collection<String> getTableDefinitions() {
-        return Arrays.asList(String.format(TestUtils.CREATE_TABLE_SIMPLE_FORMAT, TABLE1));
+        return Arrays.asList(String.format(TestUtils.CREATE_TABLE_SIMPLE_FORMAT, TABLE1),
+                             "CREATE TABLE dateTest (t timestamp PRIMARY KEY)");
     }
 
     @Test(groups = "short")
@@ -67,6 +60,20 @@ public class QueryBuilderExecutionTest extends CCMBridge.PerClassSingleNodeClust
         assertEquals("Another test", r2.getString("t"));
         assertTrue(r2.isNull("i"));
         assertTrue(r2.isNull("f"));
+    }
+
+    @Test(groups = "short")
+    public void dateHandlingTest() throws Exception {
+
+        Date d = new Date();
+        session.execute(insertInto("dateTest").value("t", d));
+        String query = select().from("dateTest").where(eq(token("t"), fcall("token", d))).toString();
+        List<Row> rows = session.execute(query).all();
+
+        assertEquals(1, rows.size());
+
+        Row r1 = rows.get(0);
+        assertEquals(d, r1.getDate("t"));
     }
 
     @Test(groups = "unit")

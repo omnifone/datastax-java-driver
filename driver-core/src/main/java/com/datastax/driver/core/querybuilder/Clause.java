@@ -24,7 +24,7 @@ public abstract class Clause extends Utils.Appendeable {
 
     private Clause(String name) {
         this.name = name;
-    };
+    }
 
     String name() {
         return name;
@@ -83,12 +83,12 @@ public abstract class Clause extends Utils.Appendeable {
             //    ... IN ? ...
             // which binds the variable to the full list the IN is on.
             if (values.size() == 1 && values.get(0) instanceof BindMarker) {
-                Utils.appendName(name, sb).append("IN ").append(values.get(0));
+                Utils.appendName(name, sb).append(" IN ").append(values.get(0));
                 return;
             }
 
             Utils.appendName(name, sb).append(" IN (");
-            Utils.joinAndAppendValues(sb, ",", values, variables).append(")");
+            Utils.joinAndAppendValues(sb, ",", values, variables).append(')');
         }
 
         @Override

@@ -18,10 +18,11 @@ package com.datastax.driver.core.querybuilder;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.Arrays;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.testng.annotations.Test;
-
 import static org.testng.Assert.*;
 
 import com.datastax.driver.core.ConsistencyLevel;
@@ -62,6 +63,10 @@ public class QueryBuilderTest {
 
         query = "SELECT a FROM foo WHERE k IN ();";
         select = select("a").from("foo").where(in("k"));
+        assertEquals(select.toString(), query);
+
+        query = "SELECT a FROM foo WHERE k IN ?;";
+        select = select("a").from("foo").where(in("k", bindMarker()));
         assertEquals(select.toString(), query);
 
         query = "SELECT count(*) FROM foo;";

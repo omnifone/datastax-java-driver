@@ -16,12 +16,12 @@
 package com.datastax.driver.core;
 
 import java.net.InetAddress;
-import java.util.*;
+import java.net.InetSocketAddress;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -62,13 +62,13 @@ public class AuthenticationTest {
     @Test(groups = "short")
     public void testAuthenticatedConnection() throws InterruptedException {
         try {
-            Cluster.builder().addContactPoint(CCMBridge.IP_PREFIX + "1")
+            Cluster.builder().addContactPoint(CCMBridge.IP_PREFIX + '1')
                                                 .withCredentials("cassandra", "cassandra")
                                                 .build()
                                                 .connect();
         } catch (NoHostAvailableException e) {
 
-            for (Map.Entry<InetAddress, Throwable> entry : e.getErrors().entrySet())
+            for (Map.Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
                 logger.error("Error connecting to " + entry.getKey(),  entry.getValue());
             throw new RuntimeException(e);
         }
@@ -77,13 +77,13 @@ public class AuthenticationTest {
     @Test(groups = "short", expectedExceptions = AuthenticationException.class)
     public void testConnectionAttemptWithIncorrectCredentialsIsRefused() throws InterruptedException {
         try {
-            Cluster.builder().addContactPoint(CCMBridge.IP_PREFIX + "1")
+            Cluster.builder().addContactPoint(CCMBridge.IP_PREFIX + '1')
                    .withCredentials("bogus", "bogus")
                    .build()
                    .connect();
         } catch (NoHostAvailableException e) {
 
-            for (Map.Entry<InetAddress, Throwable> entry : e.getErrors().entrySet())
+            for (Map.Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
                 logger.info("Error connecting to " + entry.getKey() + ": " + entry.getValue());
             throw new RuntimeException(e);
         }
@@ -92,12 +92,12 @@ public class AuthenticationTest {
     @Test(groups = "short", expectedExceptions = AuthenticationException.class)
     public void testConnectionAttemptWithoutCredentialsIsRefused() throws InterruptedException {
         try {
-            Cluster.builder().addContactPoint(CCMBridge.IP_PREFIX + "1")
+            Cluster.builder().addContactPoint(CCMBridge.IP_PREFIX + '1')
                               .build()
                               .connect();
         } catch (NoHostAvailableException e) {
 
-            for (Map.Entry<InetAddress, Throwable> entry : e.getErrors().entrySet())
+            for (Map.Entry<InetSocketAddress, Throwable> entry : e.getErrors().entrySet())
                 logger.info("Error connecting to " + entry.getKey() + ": " + entry.getValue());
             throw new RuntimeException(e);
         }

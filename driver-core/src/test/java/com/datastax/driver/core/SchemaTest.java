@@ -18,8 +18,7 @@ package com.datastax.driver.core;
 import java.util.*;
 
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Test we correctly process and print schema.
@@ -51,6 +50,12 @@ public class SchemaTest extends CCMBridge.PerClassSingleNodeCluster {
                   + "    PRIMARY KEY (k)\n"
                   + ");";
 
+        String counters = "CREATE TABLE ks.counters (\n"
+                        + "    k text,\n"
+                        + "    c counter,\n"
+                        + "    PRIMARY KEY (k)\n"
+                        + ");";
+
         String compactStatic = "CREATE TABLE ks.compact_static (\n"
                              + "    k text,\n"
                              + "    i int,\n"
@@ -77,6 +82,7 @@ public class SchemaTest extends CCMBridge.PerClassSingleNodeCluster {
 
         cql3.put("sparse", sparse);
         cql3.put("static", st);
+        cql3.put("counters", counters);
         compact.put("compact_static", compactStatic);
         compact.put("compact_dynamic", compactDynamic);
         compact.put("compact_composite", compactComposite);
@@ -107,9 +113,9 @@ public class SchemaTest extends CCMBridge.PerClassSingleNodeCluster {
 
     private static String stripOptions(String def, boolean keepFirst) {
         if (keepFirst)
-            return def.split("\n   AND ")[0] + ";";
+            return def.split("\n   AND ")[0] + ';';
         else
-            return def.split(" WITH ")[0] + ";";
+            return def.split(" WITH ")[0] + ';';
     }
 
     // Note: this test is a bit fragile in the sense that it rely on the exact
@@ -139,6 +145,16 @@ public class SchemaTest extends CCMBridge.PerClassSingleNodeCluster {
     @Test(groups = "short")
     public void schemaExportOptionsTest() {
         TableMetadata metadata = cluster.getMetadata().getKeyspace(TestUtils.SIMPLE_KEYSPACE).getTable("with_options");
-        assertEquals(metadata.exportAsString(), withOptions);
+
+        String withOpts = withOptions;
+        // With C* 2.0 we'll have a few additional options
+        if (cluster.getConfiguration().getProtocolOptions().getProtocolVersion() > 1) {
+            // Strip the last ';'
+            withOpts = withOpts.substring(0, withOpts.length() - 1) + '\n';
+            withOpts += "   AND default_time_to_live = 0\n"
+                     +  "   AND speculative_retry = '99.0PERCENTILE'\n"
+                     +  "   AND index_interval = 128;";
+        }
+        assertEquals(metadata.exportAsString(), withOpts);
     }
 }

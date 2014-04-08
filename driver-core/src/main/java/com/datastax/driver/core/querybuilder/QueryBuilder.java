@@ -15,11 +15,7 @@
  */
 package com.datastax.driver.core.querybuilder;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.datastax.driver.core.RegularStatement;
 import com.datastax.driver.core.TableMetadata;
@@ -231,9 +227,9 @@ public final class QueryBuilder {
      */
     public static String quote(String columnName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\"");
+        sb.append('"');
         Utils.appendName(columnName, sb);
-        sb.append("\"");
+        sb.append('"');
         return sb.toString();
     }
 
@@ -247,7 +243,7 @@ public final class QueryBuilder {
         StringBuilder sb = new StringBuilder();
         sb.append("token(");
         Utils.appendName(columnName, sb);
-        sb.append(")");
+        sb.append(')');
         return sb.toString();
     }
 
@@ -263,7 +259,7 @@ public final class QueryBuilder {
         StringBuilder sb = new StringBuilder();
         sb.append("token(");
         Utils.joinAndAppendNames(sb, ",", Arrays.asList((Object[])columnNames));
-        sb.append(")");
+        sb.append(')');
         return sb.toString();
     }
 
@@ -806,7 +802,7 @@ public final class QueryBuilder {
      * <i>Note: the 2nd and 3rd examples in this table are not a valid CQL3 queries.</i>
      * <p>
      * The use of that method is generally discouraged since it lead to security risks. However,
-     * if you know what you are doing, it allows to escape the interprations done by the
+     * if you know what you are doing, it allows to escape the interpretations done by the
      * QueryBuilder.
      *
      * @param str the raw value to use as a string
@@ -820,7 +816,7 @@ public final class QueryBuilder {
      * Creates a function call.
      *
      * @param name the name of the function to call.
-     * @param parameters the paramters for the function.
+     * @param parameters the parameters for the function.
      * @return the function call.
      */
     public static Object fcall(String name, Object... parameters) {

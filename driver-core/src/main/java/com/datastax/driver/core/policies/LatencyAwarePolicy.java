@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -241,7 +240,7 @@ public class LatencyAwarePolicy implements LoadBalancingPolicy {
      * Returns a snapshot of the scores (latency averages) maintained by this
      * policy.
      *
-     * @return a new (immutable) {@link Snaphot} object containing the current
+     * @return a new (immutable) {@link Snapshot} object containing the current
      * latency scores maintained by this policy.
      */
     public Snapshot getScoresSnapshot() {
@@ -574,6 +573,7 @@ public class LatencyAwarePolicy implements LoadBalancingPolicy {
         public Builder withScale(long scale, TimeUnit unit) {
             if (scale <= 0)
                 throw new IllegalArgumentException("Invalid scale, must be strictly positive");
+            this.scale = unit.toNanos(scale);
             return this;
         }
 
@@ -632,7 +632,7 @@ public class LatencyAwarePolicy implements LoadBalancingPolicy {
         }
 
         /**
-         * Sets the minimimum number of measurements per-host to consider for
+         * Sets the minimum number of measurements per-host to consider for
          * the resulting latency aware policy.
          * <p>
          * Penalizing nodes is based on an average of their recently measured
@@ -649,7 +649,7 @@ public class LatencyAwarePolicy implements LoadBalancingPolicy {
          * {@code minMeasure} measurements).
          * <p>
          * Note that the number of collected measurements for a given host is
-         * reseted if the node is restarted.
+         * reset if the node is restarted.
          * <p>
          * The default for this option (if this method is not called) is <b>50</b>.
          * Note that it is probably not a good idea to put this option too low

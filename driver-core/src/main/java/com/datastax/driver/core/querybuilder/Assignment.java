@@ -16,9 +16,10 @@
 package com.datastax.driver.core.querybuilder;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.List;
 
-import static com.datastax.driver.core.querybuilder.Utils.*;
+import static com.datastax.driver.core.querybuilder.Utils.appendName;
+import static com.datastax.driver.core.querybuilder.Utils.appendValue;
 
 public abstract class Assignment extends Utils.Appendeable {
 
@@ -26,7 +27,7 @@ public abstract class Assignment extends Utils.Appendeable {
 
     private Assignment(String name) {
         this.name = name;
-    };
+    }
 
     static class SetAssignment extends Assignment {
 
@@ -40,7 +41,7 @@ public abstract class Assignment extends Utils.Appendeable {
         @Override
         void appendTo(StringBuilder sb, List<ByteBuffer> variables) {
             appendName(name, sb);
-            sb.append("=");
+            sb.append('=');
             appendValue(value, sb, variables);
         }
 
@@ -68,7 +69,7 @@ public abstract class Assignment extends Utils.Appendeable {
 
         @Override
         void appendTo(StringBuilder sb, List<ByteBuffer> variables) {
-            appendName(name, sb).append("=");
+            appendName(name, sb).append('=');
             appendName(name, sb).append(isIncr ? "+" : "-");
             appendValue(value, sb, variables);
         }
@@ -90,9 +91,9 @@ public abstract class Assignment extends Utils.Appendeable {
 
         @Override
         void appendTo(StringBuilder sb, List<ByteBuffer> variables) {
-            appendName(name, sb).append("=");
+            appendName(name, sb).append('=');
             appendValue(value, sb, variables);
-            sb.append("+");
+            sb.append('+');
             appendName(name, sb);
         }
 
@@ -115,7 +116,7 @@ public abstract class Assignment extends Utils.Appendeable {
 
         @Override
         void appendTo(StringBuilder sb, List<ByteBuffer> variables) {
-            appendName(name, sb).append("[").append(idx).append("]=");
+            appendName(name, sb).append('[').append(idx).append("]=");
             appendValue(value, sb, variables);
         }
 
@@ -138,7 +139,7 @@ public abstract class Assignment extends Utils.Appendeable {
 
         @Override
         void appendTo(StringBuilder sb, List<ByteBuffer> variables) {
-            appendName(name, sb).append("=");
+            appendName(name, sb).append('=');
             appendName(name, sb).append(isAdd ? "+" : "-");
             appendValue(collection, sb, variables);
         }
@@ -162,7 +163,7 @@ public abstract class Assignment extends Utils.Appendeable {
 
         @Override
         void appendTo(StringBuilder sb, List<ByteBuffer> variables) {
-            appendName(name, sb).append("[");
+            appendName(name, sb).append('[');
             appendValue(key, sb, variables);
             sb.append("]=");
             appendValue(value, sb, variables);

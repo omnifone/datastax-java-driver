@@ -1,14 +1,90 @@
 CHANGELOG
 =========
 
+2.0.2:
+------
+
+- [api] The type of the map key returned by NoHostAvailable#getErrors has changed from
+  InetAddress to InetSocketAddress. Same for Initializer#getContactPoints return and
+  for AuthProvider#newAuthenticator.
+- [api] The default load balacing policy is now DCAwareRoundRobinPolicy, and the local
+  datacenter is automatically picked based on the first connected node. Furthermore,
+  the TokenAwarePolicy is also used by default (JAVA-296)
+- [new] New optional AddressTranslater (JAVA-145)
+
+Merged from 1.0 branch:
+
+- [new] Expose the name of the partitioner in use in the cluster metadata (JAVA-179)
+- [new] Add new WhiteListPolicy to limit the nodes connected to a particular list
+- [improvement] Do not hop DC for LOCAL_* CL in DCAwareRoundRobinPolicy (JAVA-289)
+
+
+2.0.1:
+------
+
+- [improvement] Handle the static columns introduced in Cassandra 2.0.6 (JAVA-278)
+- [improvement] Add Cluster#newSession method to create Session without connecting
+  right away (JAVA-208)
+- [bug] Add missing iso8601 patterns for parsing dates (JAVA-279)
+- [bug] Properly parse BytesType as the blob type
+- [bug] Potential NPE when parsing schema of pre-CQL tables of C* 1.2 nodes (JAVA-280)
+
+Merged from 1.0 branch:
+
+- [bug] LatencyAwarePolicy.Builder#withScale doesn't set the scale (JAVA-275)
+- [new] Add methods to check if a Cluster/Session instance has been closed already (JAVA-114)
+
+
 2.0.0:
 ------
 
+- [api] Case sensitive identifier by default in Metadata (JAVA-269)
+- [bug] Fix potential NPE in Cluster#connect (JAVA-274)
+
+Merged from 1.0 branch:
+
+- [bug] Always return the PreparedStatement object that is cache internally (JAVA-263)
+- [bug] Fix race when multiple connect are done in parallel (JAVA-261)
+- [bug] Don't connect at all to nodes that are ignored by the load balancing
+  policy (JAVA-270)
+
+
+2.0.0-rc3:
+----------
+
+- [improvement] The protocol version 1 is now supported (features only supported by the
+  version 2 of the protocol throw UnsupportedFeatureException).
+- [improvement] Make most main objects interface to facilitate testing/mocking (JAVA-195)
+- [improvement] Adds new getStatements and clear methods to BatchStatement.
+- [api] Renamed shutdown to closeAsync and ShutdownFuture to CloseFuture. Clustering
+  and Session also now implement Closeable (JAVA-247).
+- [bug] Fix potential thread leaks when shutting down Metrics (JAVA-232)
+- [bug] Fix potential NPE in HostConnectionPool (JAVA-231)
+- [bug] Avoid NPE when node is in an unconfigured DC (JAVA-244)
+- [bug] Don't block for scheduled reconnections on Cluster#close (JAVA-258)
+
+Merged from 1.0 branch:
+
+- [new] Added Session#prepareAsync calls (JAVA-224)
+- [new] Added Cluster#getLoggedKeyspace (JAVA-249)
+- [improvement] Avoid preparing a statement multiple time per host with multiple sessions
+- [bug] Make sure connections are returned to the right pools (JAVA-255)
+- [bug] Use date string in query build to work-around CASSANDRA-6718 (JAVA-264)
+
+
+2.0.0-rc2:
+----------
+
 - [new] Add LOCAL_ONE consistency level support (requires using C* 2.0.2+) (JAVA-207)
+- [bug] Fix parsing of counter types (JAVA-219)
+- [bug] Fix missing whitespace for IN clause in the query builder (JAVA-218)
+- [bug] Fix replicas computation for token aware balancing (JAVA-221)
 
 Merged from 1.0 branch:
 
 - [bug] Fix regression from JAVA-201 (JAVA-213)
+- [improvement] New getter to obtain a snapshot of the scores maintained by
+  LatencyAwarePolicy.
 
 
 2.0.0-rc1:
@@ -71,10 +147,14 @@ Merged from 1.0 branch:
 ------
 
 - [new] OSGi bundle (JAVA-142)
+- [new] Add support for ConsistencyLevel.LOCAL_ONE; note that this
+  require Cassandra 1.2.12+ (JAVA-207)
 - [improvement] Make collections returned by Row immutable (JAVA-205)
 - [improvement] Limit internal thread pool size (JAVA-203)
 - [improvement] New getter to obtain a snapshot of the scores maintained by
   LatencyAwarePolicy.
+- [improvement] Avoid synchronization when getting codec for collection
+  types (JAVA-222)
 - [bug] Don't retain unused PreparedStatement in memory (JAVA-201, JAVA-213)
 - [bug] Add missing clustering order info in TableMetadata
 - [bug] Allow bind markers for collections in the query builder (JAVA-196)
